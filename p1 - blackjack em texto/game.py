@@ -27,7 +27,7 @@ class Game:
     def play(self):
         i = 1
         while True:
-            if not any([player.can_play() for player in self.players]):
+            if not any(player.can_play() for player in self.players):
                 break
             
             self.show_status()
