@@ -34,7 +34,7 @@ class Game:
             self._current_player = self.players[i%len(self.players)]
 
             if self._current_player.can_play():
-                should_continue = input(f"{self._current_player.name}, draw one more? (y/n): ")
+                should_continue = self._current_player.play()
                 if should_continue.lower() == "y":
                     self.croupier.give_card(self._current_player)
                 else:

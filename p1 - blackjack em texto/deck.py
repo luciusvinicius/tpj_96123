@@ -14,9 +14,10 @@ class Deck:
     def get_score(self):
         totals = [0]
         for card in self.cards:
-            # A card multiple options [12, 31, 11, 21]
+            # 'A' card all options
             if card.value == "A":
                 totals *= 2
+                
                 for count in range(len(totals)):
                     if count < len(totals)/2:
                         totals[count] += 1

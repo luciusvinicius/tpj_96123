@@ -13,6 +13,9 @@ class Player:
         if self.has_busted():
             res += " - BUST"
         return res
+    
+    def play(self):
+        return input(f"{self.name}, draw one more? (y/n): ")
 
     def add(self, card):
         self.hand.add(card)
@@ -28,7 +31,7 @@ class Player:
         return ma
     
     def has_busted(self):
-        return min(self.get_score()) > 21
+        return min(self.get_score()) > LIMIT
     
     def can_play(self):
         return not self.has_finished and not self.has_busted()
