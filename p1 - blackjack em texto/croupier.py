@@ -7,3 +7,6 @@ class Croupier(Player):
     
     def give_card(self, player):
         player.add(self.deck.draw())
+        
+    def can_play(self):
+        return super().can_play() and min(self.get_score()) < 17

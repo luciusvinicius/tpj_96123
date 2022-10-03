@@ -26,20 +26,31 @@ class Game:
         
     def play(self):
         i = 1
-        num_finishes = 0
         while True:
+            if not any([player.can_play() for player in self.players]):
+                break
+            
             self.show_status()
             self._current_player = self.players[i%len(self.players)]
 
-            if not self._current_player.has_finished:
+            if self._current_player.can_play():
                 should_continue = input(f"{self._current_player.name}, draw one more? (y/n): ")
                 if should_continue.lower() == "y":
                     self.croupier.give_card(self._current_player)
                 else:
                     self._current_player.finish()
-                    num_finishes += 1
-
-            if num_finishes >= len(self.players):
-                break
 
             i += 1
+        self.finish_game()
+        
+    def finish_game(self):
+        print("GAME ENDED")
+        self.show_status()
+        
+        winner = None
+        for player in self.players:
+            if winner is None or player.get_final_score() > winner.get_final_score():
+                winner = player
+                
+        print("And the winner is...")
+        print(winner.name)
