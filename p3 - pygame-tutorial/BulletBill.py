@@ -1,0 +1,15 @@
+from pygame import *
+from pygame.sprite import *
+
+from Object import Object
+
+IMG_URL = "./bulletbill-transparent.png"
+
+class BulletBill(Object):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        
+        picture = image.load(IMG_URL)
+        picture = transform.scale(picture, (215, 140)) # scale
+        self.image = picture.convert_alpha()
+    
