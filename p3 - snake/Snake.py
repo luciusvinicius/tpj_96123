@@ -26,10 +26,7 @@ class Snake(Sprite):
         
         for _ in range(1, length):
             self.add_part()
-        
-
-        
-            
+                    
     def add_part(self):
         print(f"Added Part, Length = {self.length}")
         bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, scale=self.scale, speed=self.speed)
@@ -55,10 +52,12 @@ class Snake(Sprite):
                 break
             
             body_part.move(prev.direction)
+            self.set_straight(body_part)
             body_part.direction = prev.direction
             body_part = body_part.prev
         
         body_part.direction = direction
+        self.set_head(body_part)
         body_part.move(direction)
         
         
