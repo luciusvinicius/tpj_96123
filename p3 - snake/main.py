@@ -13,7 +13,7 @@ SPEED = 1
 
 display = pygame.display.set_mode((SCALE * WIDTH, SCALE * HEIGHT))
 clock = pygame.time.Clock()
-LENGTH = 1
+LENGTH = 3
 snake = Snake(40, 20, SCALE, LENGTH, SPEED)
 print(f"Snake root {snake.root}")
 # snake_body = [(40, 20), (39, 20), (38, 20)]

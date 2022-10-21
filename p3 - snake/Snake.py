@@ -4,8 +4,10 @@ from pygame.sprite import *
 from BodyPart import BodyPart
 from Food import Food
 
+BASE_DIR = "./sprites"
+
 class Snake(Sprite):
-    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0)):
+    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0), color="green"):
         self.length = 1
         self.root = BodyPart(x, y, direction, scale=scale, speed=speed)
         self.speed = speed
@@ -15,12 +17,23 @@ class Snake(Sprite):
         self.all_sprites.add(self.root)
         self.scale = scale
         
+        self.head_sprite = image.load(f"{BASE_DIR}/head-{color}.png")
+        self.straight_sprite = image.load(f"{BASE_DIR}/straight-{color}.png")
+        self.end_sprite = image.load(f"{BASE_DIR}/end-{color}.png")
+        self.curve_sprite = image.load(f"{BASE_DIR}/curve-{color}.png")
+        
+        self.set_head(self.root)
+        
         for _ in range(1, length):
-            self.add_part()       
+            self.add_part()
+        
+
+        
             
     def add_part(self):
         print(f"Added Part, Length = {self.length}")
         bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, scale=self.scale, speed=self.speed)
+        self.set_end(bp)
         # bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, self.scale)
         # bp = BodyPart(self.last.rect.x - self.last.direction[0] * self.scale, self.last.rect.y - self.last.direction[1] * self.scale, self.last.direction, self.scale)
         
@@ -92,6 +105,19 @@ class Snake(Sprite):
             if nxt is None:
                 break
             bp = nxt
+
+    
+    def set_head(self, body_part : BodyPart):
+        body_part.set_sprite(self.head_sprite)
+    
+    def set_straight(self, body_part : BodyPart):
+        body_part.set_sprite(self.straight_sprite)
+    
+    def set_end(self, body_part : BodyPart):
+        body_part.set_sprite(self.end_sprite)
+    
+    def set_curve(self, body_part : BodyPart):
+        body_part.set_sprite(self.curve_sprite)
             
         
             

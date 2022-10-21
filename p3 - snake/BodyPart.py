@@ -35,9 +35,15 @@ class BodyPart(Sprite):
     
     def apply_scale(self, scale):
         self.image = transform.scale(self.base_image, (self.img_scale, self.img_scale))
+    
+    def set_sprite(self, sprite):
+        self.base_image = transform.scale(sprite, (self.img_scale, self.img_scale))
+        picture = transform.scale(sprite, (self.img_scale, self.img_scale))
+        self.image = picture.convert_alpha()
         
     def __str__(self):
         return f"BodyPart: ({self.rect.x}, {self.rect.y})"
+    
     
     # @move.overload
     # def move(self, x, y):

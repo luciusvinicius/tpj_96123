@@ -22,7 +22,9 @@ class Food(Sprite):
         
     def get_random_pos(self):
         # return (random.randrange(self.WIDTH), random.randrange(self.HEIGHT))
-        return (random.randrange(self.WIDTH) * self.SCALE, random.randrange(self.HEIGHT) * self.SCALE)
+        new_pos = (random.randrange(self.WIDTH) * self.SCALE, random.randrange(self.HEIGHT) * self.SCALE)
+        print(f"new food: {new_pos}")
+        return new_pos
     
         
     def change_position(self):
