@@ -1,6 +1,7 @@
 from typing import Tuple, overload
 from pygame import *
 from pygame.sprite import *
+import math
 
 IMG_URL = "./sprites/banana.jpg"
 
@@ -35,6 +36,13 @@ class BodyPart(Sprite):
     
     def apply_scale(self, scale):
         self.image = transform.scale(self.base_image, (self.img_scale, self.img_scale))
+        angle_x = 0 if self.direction[0] >= 0 else 180
+        angle = - 90 * self.direction[1] + angle_x
+        print(f"angle: {angle}")
+        self.image = transform.rotate(self.image, angle)
+        
+        # self.image = transform.rotate(self.image, 90)
+        
     
     def set_sprite(self, sprite):
         self.base_image = transform.scale(sprite, (self.img_scale, self.img_scale))
