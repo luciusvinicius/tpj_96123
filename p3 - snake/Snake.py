@@ -5,21 +5,22 @@ from BodyPart import BodyPart
 from Food import Food
 
 class Snake(Sprite):
-    def __init__(self, x, y, scale=0, length = 3, direction = (1, 0)):
+    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0)):
         self.length = 1
-        self.root = BodyPart(x, y, direction)
+        self.root = BodyPart(x, y, direction, scale=scale, speed=speed)
+        self.speed = speed
         self.last = self.root
         self.direction = direction
         self.all_sprites = Group()
         self.all_sprites.add(self.root)
-        # self.scale = scale
+        self.scale = scale
         
         for _ in range(1, length):
             self.add_part()       
             
     def add_part(self):
         print(f"Added Part, Length = {self.length}")
-        bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction)
+        bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, scale=self.scale, speed=self.speed)
         # bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, self.scale)
         # bp = BodyPart(self.last.rect.x - self.last.direction[0] * self.scale, self.last.rect.y - self.last.direction[1] * self.scale, self.last.direction, self.scale)
         
@@ -61,14 +62,35 @@ class Snake(Sprite):
             
     def kills_itself(self):
         bp = self.root
-        lst = [(bp.x, bp.y)]
+        lst = [(bp.rect.x, bp.rect.y)]
         while True:
             nxt = bp.next
             if nxt is None:
                 return False
-            
-            if (nxt.x, nxt.y) in lst:
+            if (nxt.rect.x, nxt.rect.y) in lst:
                 return True
+            lst.append((nxt.rect.x, nxt.rect.y))
+            bp = nxt
+    
+    def crashes_into_wall(self, WIDTH, HEIGHT):
+        # bp = self.root
+        # while True:
+        #     if bp.x not in range(WIDTH) or bp.y not in range(HEIGHT):
+        #         print("Snake crashed against the wall")
+        #         return True
+            
+        #     nxt = bp.next
+        #     if nxt is None:
+                
+        return self.root.rect.x not in range(WIDTH * self.scale) or self.root.rect.y not in range(HEIGHT * self.scale)
+
+    def apply_scale(self):
+        bp = self.root
+        while True:
+            bp.apply_scale(self.scale)
+            nxt = bp.next
+            if nxt is None:
+                break
             bp = nxt
             
         
