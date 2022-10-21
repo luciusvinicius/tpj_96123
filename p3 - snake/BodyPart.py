@@ -13,14 +13,16 @@ class BodyPart(Sprite):
         self.x : int = x
         self.y : int = y
         self.speed = speed
-        self.rect = Rect(self.x, self.y, scale, scale)
+        self.img_scale = scale * 1.5
+        
+        self.rect = Rect(self.x, self.y, self.img_scale, self.img_scale)
         self.prev : BodyPart = None
         self.next : BodyPart = None
         self.direction : Tuple = direction
         # self.scale = scale
         
         picture = image.load(IMG_URL)
-        picture = transform.scale(picture, (25, 25)) # scale
+        picture = transform.scale(picture, (self.img_scale, self.img_scale)) # scale
         self.base_image = picture.convert_alpha()
         self.image = picture.convert_alpha()
         
@@ -32,7 +34,7 @@ class BodyPart(Sprite):
         self.y += direction[1]*self.speed
     
     def apply_scale(self, scale):
-        self.image = transform.scale(self.base_image, (scale, scale))
+        self.image = transform.scale(self.base_image, (self.img_scale, self.img_scale))
         
     def __str__(self):
         return f"BodyPart: ({self.rect.x}, {self.rect.y})"
