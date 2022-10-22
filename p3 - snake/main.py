@@ -63,29 +63,31 @@ while running:
             print(event.txt)
     print("---------")    
     # for snake in snakes:
-    snake = snakes[1]
-    print(snake.root)
     display.fill("black")
-    snake.all_sprites.draw(display)
-    food.sprite.draw(display)
-
-    body_part = snake.root
-
-    if snake.collides_with(food):
-        snake.add_part()
-        food.change_position()
     
-    # if snake.crashes_into_wall(WIDTH, HEIGHT):
-    #     print("Snake crashed against the wall")
-    #     running = False
+    for snake in snakes:
+        print(snake.root)
+        
+        snake.all_sprites.draw(display)
+        food.sprite.draw(display)
 
-    # if snake.kills_itself():
-    #     print("Snake eats self")
-    #     running = False
-    
-    snake.move(snake.direction)
-    # update window
-    snake.apply_scale()
+        body_part = snake.root
+
+        if snake.collides_with(food):
+            snake.add_part()
+            food.change_position()
+        
+        # if snake.crashes_into_wall(WIDTH, HEIGHT):
+        #     print("Snake crashed against the wall")
+        #     running = False
+
+        # if snake.kills_itself():
+        #     print("Snake eats self")
+        #     running = False
+        
+        snake.move(snake.direction)
+        # update window
+        snake.apply_scale()
     pygame.display.flip()
     clock.tick(15)
 
