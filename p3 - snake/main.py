@@ -10,12 +10,18 @@ from Snake import Snake
 WIDTH, HEIGHT = 80, 40
 SCALE = 10
 SPEED = 1
+NUM_PLAYERS = 2
+if NUM_PLAYERS < 1:
+    NUM_PLAYERS = 1
+    
+COLORS = ["green", "yellow"]
 
 display = pygame.display.set_mode((SCALE * WIDTH, SCALE * HEIGHT))
 clock = pygame.time.Clock()
 LENGTH = 3
-snake = Snake(40, 20, SCALE, LENGTH, SPEED)
-print(f"Snake root {snake.root}")
+snakes = [Snake(i*40, i*20, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)]) for i in range(NUM_PLAYERS)]
+# snake = Snake(40, 20, SCALE, LENGTH, SPEED)
+
 # snake_body = [(40, 20), (39, 20), (38, 20)]
 # snake_direction = (1, 0)
 # snake_length = 3
@@ -25,12 +31,23 @@ GAME_EVENT = pygame.event.custom_type()
 
 
 COMMANDS = {
-    pygame.K_w: Up(snake),
-    pygame.K_a: Left(snake),
-    pygame.K_s: Down(snake),
-    pygame.K_d: Right(snake),
+    pygame.K_w: Up(snakes[0]),
+    pygame.K_a: Left(snakes[0]),
+    pygame.K_s: Down(snakes[0]),
+    pygame.K_d: Right(snakes[0]),
 }
 
+if NUM_PLAYERS >= 2:
+    COMMANDS.update(
+        {
+            pygame.K_UP: Up(snakes[1]),
+            pygame.K_LEFT: Left(snakes[1]),
+            pygame.K_DOWN: Down(snakes[1]),
+            pygame.K_RIGHT: Right(snakes[1]),
+        }
+    )
+    
+    
 running = True
 while running:
     for event in pygame.event.get():
@@ -44,8 +61,10 @@ while running:
 
         elif event.type == GAME_EVENT:
             print(event.txt)
-            
-            
+    print("---------")    
+    # for snake in snakes:
+    snake = snakes[1]
+    print(snake.root)
     display.fill("black")
     snake.all_sprites.draw(display)
     food.sprite.draw(display)
