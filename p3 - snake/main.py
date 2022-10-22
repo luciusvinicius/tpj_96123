@@ -8,9 +8,9 @@ from Food import Food
 from Snake import Snake
 
 WIDTH, HEIGHT = 80, 40
-SCALE = 10
+SCALE = 15
 SPEED = 1
-NUM_PLAYERS = 2
+NUM_PLAYERS = 3
 if NUM_PLAYERS < 1:
     NUM_PLAYERS = 1
     
@@ -19,7 +19,7 @@ COLORS = ["green", "yellow"]
 display = pygame.display.set_mode((SCALE * WIDTH, SCALE * HEIGHT))
 clock = pygame.time.Clock()
 LENGTH = 3
-snakes = [Snake(i*40, i*20, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)]) for i in range(NUM_PLAYERS)]
+snakes = [Snake((i+1)*40, (i+1)*20, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)]) for i in range(NUM_PLAYERS)]
 # snake = Snake(40, 20, SCALE, LENGTH, SPEED)
 
 # snake_body = [(40, 20), (39, 20), (38, 20)]
@@ -65,7 +65,6 @@ while running:
     display.fill("black")
     
     for snake in snakes:
-        print(snake.root)
         
         snake.all_sprites.draw(display)
         food.sprite.draw(display)
@@ -84,7 +83,7 @@ while running:
         #     print("Snake eats self")
         #     running = False
         
-        snake.move(snake.direction)
+        snake.move(snake.direction, WIDTH, HEIGHT)
         snake.apply_scale()
         
     pygame.display.flip()

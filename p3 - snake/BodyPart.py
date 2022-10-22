@@ -55,10 +55,13 @@ class BodyPart(Sprite):
         if self.clashes_with_wall(width, height, scale):
             new_x = self.rect.x if 0 <= self.rect.x <= width*scale else self.rect.x % (width*scale)
             new_y = self.rect.y if 0 <= self.rect.y <= height*scale else self.rect.y % (height*scale)
+
             self.teleport(new_x, new_y)
         
     
     def teleport(self, new_x, new_y):
+        # print(f"Teleport {self.id} from ({self.rect.x}, {self.rect.y}) to ({new_x}, {new_y})")
+        
         self.rect.update(new_x, new_y, self.img_scale, self.img_scale)
 
     

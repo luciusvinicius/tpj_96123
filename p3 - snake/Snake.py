@@ -36,7 +36,7 @@ class Snake(Sprite):
         self.all_sprites.add(bp)
         
         
-    def move(self, direction):
+    def move(self, direction, width, height):
         body_part = self.last
         
         while True:
@@ -45,13 +45,13 @@ class Snake(Sprite):
             if prev is None:
                 break
 
-            body_part.move(prev.direction)
+            body_part.move(prev.direction, width, height, self.scale)
             
             body_part.direction = prev.direction
             body_part = body_part.prev
         
         body_part.direction = direction
-        body_part.move(direction)
+        body_part.move(direction, width, height, self.scale)
         
     def collides_with(self, fruit : Food):
         bd = self.root
