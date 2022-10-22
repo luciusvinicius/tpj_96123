@@ -26,15 +26,19 @@ angles = {
 
 
 class BodyPart(Sprite):
+    counter = 1
     def __init__(self, x, y, direction, scale=1, speed=1):
         Sprite.__init__(self)
         print("init body part")
         # self.x : int = x-35
         # self.y : int = y-18
+        
         self.x : int = x
         self.y : int = y
         self.speed = speed
         self.img_scale = scale * 1.5
+        self.id = self.__class__.counter
+        self.__class__.counter += 1
 
         self.rect = Rect(self.x, self.y, self.img_scale, self.img_scale)
         self.prev : BodyPart = None
@@ -42,6 +46,7 @@ class BodyPart(Sprite):
         self.direction : Tuple = direction
         self.angle : int = 0
         # self.scale = scale
+        self.previous_direction : Tuple = direction
 
         picture = image.load(IMG_URL)
         picture = transform.scale(picture, (self.img_scale, self.img_scale)) # scale
@@ -68,8 +73,6 @@ class BodyPart(Sprite):
             self.image = transform.rotate(self.image, angle)
 
 
-
-
     def set_sprite(self, sprite):
         self.base_image = transform.scale(sprite, (self.img_scale, self.img_scale))
         picture = transform.scale(sprite, (self.img_scale, self.img_scale))
@@ -83,18 +86,37 @@ class BodyPart(Sprite):
         # print("-------------")
         prev = self.prev
         if prev is not None and prev.direction != self.direction:
-            print(f"{prev.direction=}")
-            print(f"{self.direction=}")
-            print(f"{angles[self.direction][prev.direction]}")
+            # print(f"{prev.direction=}")
+            # print(f"{self.direction=}")
+            # print(f"{angles[self.direction][prev.direction]}")
             self.angle = angles[self.direction][prev.direction]
             print(f"set {self} {self.angle=}")
             return self.angle
         
         return None
 
+    def get_previously_angle(self):
+        prev = self.prev
+        if prev is not None and self.id == 2:
+            print(f"{prev.direction=}")
+            print(f"{self.direction=}")
+        if prev is not None and prev.direction != self.previous_direction:
+            # print(f"{prev.direction=}")
+            # print(f"{self.direction=}")
+            # print(f"{angles[self.direction][prev.direction]}")
+            self.angle = angles[self.previous_direction][prev.direction]
+            print(f"set {self} {self.angle=}")
+            return self.angle
+        
+        return None
+
+    def set_direction(self, direction):
+        self.previous_direction = self.direction
+        self.direction = direction
+
 
     def __str__(self):
-        return f"BodyPart: ({self.rect.x}, {self.rect.y})"
+        return f"BodyPart {self.id}: ({self.rect.x}, {self.rect.y})"
 
 
     # @move.overload

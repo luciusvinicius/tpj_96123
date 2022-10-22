@@ -42,37 +42,10 @@ class Snake(Sprite):
         # self.body.append(bp)
         
         
-    # def move(self, direction):
-    #     body_part = self.last
-    #     print(f"Root: {self.root}")
-        
-    #     while True:
-    #         prev = body_part.prev
-    #         nxt = body_part.next
-            
-    #         if prev is None:
-    #             break
-            
-    #         if nxt is not None: # Last part will be always a tail sprite
-    #             if body_part.direction == prev.direction:
-    #                 self.set_straight(body_part)
-    #             else:
-    #                 self.set_curve(body_part)
-        
-    #         body_part.move(body_part.direction)
-    #         body_part.direction = prev.direction
-    #         body_part = prev
-         
-    #     body_part.move(direction)
-    #     body_part.direction = direction
-     
-     
-     
-        
     def move(self, direction):
         # self.root.move(direction)
         body_part = self.last
-        print(f"Root: {self.root}")
+        # print(f"Root: {self.root}")
         
         while True:
             # print("------ Another -----")
@@ -81,36 +54,50 @@ class Snake(Sprite):
             
             
             if prev is None:
+                if nxt is not None:
+                    nxt_nxt = nxt.next
+                    
+                    if nxt_nxt is not None:
+                        if nxt.direction == nxt_nxt.direction:
+                            nxt.type = "straight"
+                            self.set_straight(nxt)
+                        else:
+                            nxt_angle = nxt.get_previously_angle()
+                            nxt.type = "curve"
+                            print("sussy bakaaaaaaaa")
+                            print(f"{nxt} angle is {nxt.angle}")
+                            self.set_curve(nxt)
+                            nxt.angle = nxt_angle
+                    
                 break
             
             if nxt is not None:
                 # nxt.get_curve_angle()
+                nxt_nxt = nxt.next
                 
-                if body_part.direction == prev.direction:
-                    nxt.type = "straight"
-                    self.set_straight(nxt)
-                else:
-                    nxt_angle = body_part.get_curve_angle()
-                    
-                    nxt.type = "curve"
-                    print(f"{nxt} angle is {nxt.angle}")
-                    self.set_curve(nxt)
-                    nxt.angle = nxt_angle
+                if nxt_nxt is not None:
+                    if body_part.direction == prev.direction:
+                        nxt.type = "straight"
+                        self.set_straight(nxt)
+                    else:
+                        nxt_angle = body_part.get_curve_angle()
+                        
+                        nxt.type = "curve"
+                        print(f"{nxt} angle is {nxt.angle}")
+                        self.set_curve(nxt)
+                        nxt.angle = nxt_angle
             body_part.move(prev.direction)
             
             
-            body_part.direction = prev.direction
+            body_part.set_direction(prev.direction)
             body_part = body_part.prev
         
-        body_part.direction = direction
+        body_part.set_direction(direction)
         self.set_head(body_part)
         
         body_part.move(direction)
     
 
-        
-        
-        
         
         
     def collides_with(self, fruit : Food):
@@ -136,16 +123,7 @@ class Snake(Sprite):
             lst.append((nxt.rect.x, nxt.rect.y))
             bp = nxt
     
-    def crashes_into_wall(self, WIDTH, HEIGHT):
-        # bp = self.root
-        # while True:
-        #     if bp.x not in range(WIDTH) or bp.y not in range(HEIGHT):
-        #         print("Snake crashed against the wall")
-        #         return True
-            
-        #     nxt = bp.next
-        #     if nxt is None:
-                
+    def crashes_into_wall(self, WIDTH, HEIGHT):                
         return self.root.rect.x not in range(WIDTH * self.scale) or self.root.rect.y not in range(HEIGHT * self.scale)
 
     def apply_scale(self):
