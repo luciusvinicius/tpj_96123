@@ -41,6 +41,34 @@ class Snake(Sprite):
         self.all_sprites.add(bp)
         # self.body.append(bp)
         
+        
+    # def move(self, direction):
+    #     body_part = self.last
+    #     print(f"Root: {self.root}")
+        
+    #     while True:
+    #         prev = body_part.prev
+    #         nxt = body_part.next
+            
+    #         if prev is None:
+    #             break
+            
+    #         if nxt is not None: # Last part will be always a tail sprite
+    #             if body_part.direction == prev.direction:
+    #                 self.set_straight(body_part)
+    #             else:
+    #                 self.set_curve(body_part)
+        
+    #         body_part.move(body_part.direction)
+    #         body_part.direction = prev.direction
+    #         body_part = prev
+         
+    #     body_part.move(direction)
+    #     body_part.direction = direction
+     
+     
+     
+        
     def move(self, direction):
         # self.root.move(direction)
         body_part = self.last
@@ -55,17 +83,19 @@ class Snake(Sprite):
             if prev is None:
                 break
             
-            body_part.get_curve_angle()
             if nxt is not None:
-                nxt.get_curve_angle()
+                # nxt.get_curve_angle()
                 
                 if body_part.direction == prev.direction:
                     nxt.type = "straight"
                     self.set_straight(nxt)
                 else:
+                    nxt_angle = body_part.get_curve_angle()
+                    
                     nxt.type = "curve"
                     print(f"{nxt} angle is {nxt.angle}")
                     self.set_curve(nxt)
+                    nxt.angle = nxt_angle
             body_part.move(prev.direction)
             
             
@@ -77,32 +107,7 @@ class Snake(Sprite):
         
         body_part.move(direction)
     
-    # def move(self, direction):
-    #     bp : BodyPart = self.root
-    #     bp.direction = direction
-        
-    #     while True:
-    #         nxt = bp.next
-    #         prev = bp.prev
-            
-    #         if prev is not None:
-    #             if bp.direction == prev.direction:
-    #                 self.set_straight(bp)
-    #             else:
-    #                 self.set_curve(bp)
-                    
-    #             bp.move(bp.direction)
-    #             bp.direction = prev.direction
-    #         else:
-    #             bp.move(direction)
-            
-    #         if nxt is None:
-    #             break
-            
-    #         bp = nxt
-            
-            
-        
+
         
         
         

@@ -88,6 +88,9 @@ class BodyPart(Sprite):
             print(f"{angles[self.direction][prev.direction]}")
             self.angle = angles[self.direction][prev.direction]
             print(f"set {self} {self.angle=}")
+            return self.angle
+        
+        return None
 
 
     def __str__(self):
