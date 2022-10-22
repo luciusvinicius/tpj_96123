@@ -61,25 +61,34 @@ class BodyPart(Sprite):
         self.x += direction[0]*self.speed
         self.y += direction[1]*self.speed
 
-    def apply_scale(self, scale):
+    def apply_scale(self, head_sprite, straight_sprite, end_sprite, curve_sprite):
         self.image = transform.scale(self.base_image, (self.img_scale, self.img_scale))
-        angle_x = 0 if self.direction[0] >= 0 else 180
-        angle = - 90 * self.direction[1] + angle_x
-        if self.type == "curve":
+        
+        angle = self.get_curve_angle()
+        nxt = self.next
+        prev = self.prev
+        
+        if angle is not None:
             print(f"{self}: {self.angle=}")
-            self.image = transform.rotate(self.image, self.angle)
+            self.set_sprite(curve_sprite)
 
         else:
-            self.image = transform.rotate(self.image, angle)
+            angle_x = 0 if self.direction[0] >= 0 else 180
+            angle = - 90 * self.direction[1] + angle_x
+            if nxt is None:
+                self.set_sprite(end_sprite)
+            elif prev is None:
+                self.set_sprite(head_sprite)
+            else:
+                self.set_sprite(straight_sprite)
+            
+        self.image = transform.rotate(self.image, angle)
 
 
     def set_sprite(self, sprite):
         self.base_image = transform.scale(sprite, (self.img_scale, self.img_scale))
         picture = transform.scale(sprite, (self.img_scale, self.img_scale))
         self.get_curve_angle()
-        # if self.type == "curve":
-        #     print(f"Rotated {self} to angle {self.angle}")
-        #     picture = transform.rotate(self.image, self.angle)
         self.image = picture.convert_alpha()
 
     def get_curve_angle(self):
