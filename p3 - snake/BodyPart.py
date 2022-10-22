@@ -3,7 +3,7 @@ from pygame import *
 from pygame.sprite import *
 import math
 
-IMG_URL = "./sprites/banana.jpg"
+IMG_URL = "./sprites/banana.png"
 
 angles = {
     (0,1): {

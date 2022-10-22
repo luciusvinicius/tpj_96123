@@ -61,8 +61,7 @@ while running:
 
         elif event.type == GAME_EVENT:
             print(event.txt)
-    print("---------")    
-    # for snake in snakes:
+            
     display.fill("black")
     
     for snake in snakes:
@@ -86,8 +85,8 @@ while running:
         #     running = False
         
         snake.move(snake.direction)
-        # update window
         snake.apply_scale()
+        
     pygame.display.flip()
     clock.tick(15)
 

@@ -2,7 +2,7 @@ import random
 from pygame import *
 from pygame.sprite import *
 
-IMG_URL = "./sprites/banana.jpg"
+IMG_URL = "./sprites/banana.png"
 
 class Food(Sprite):
     def __init__(self, WIDTH, HEIGHT, SCALE=1):
