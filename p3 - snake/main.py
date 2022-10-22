@@ -56,14 +56,14 @@ while running:
         snake.add_part()
         food.change_position()
     
-    if snake.crashes_into_wall(WIDTH, HEIGHT):
-        print("Snake crashed against the wall")
-        running = False
+    # if snake.crashes_into_wall(WIDTH, HEIGHT):
+    #     print("Snake crashed against the wall")
+    #     running = False
 
-    if snake.kills_itself():
-        print("Snake eats self")
-        running = False
-        
+    # if snake.kills_itself():
+    #     print("Snake eats self")
+    #     running = False
+    
     snake.move(snake.direction)
     # update window
     snake.apply_scale()

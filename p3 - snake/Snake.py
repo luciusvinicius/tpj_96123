@@ -44,21 +44,68 @@ class Snake(Sprite):
     def move(self, direction):
         # self.root.move(direction)
         body_part = self.last
+        print(f"Root: {self.root}")
         
         while True:
+            # print("------ Another -----")
             prev = body_part.prev
+            nxt = body_part.next
+            
             
             if prev is None:
                 break
             
+            body_part.get_curve_angle()
+            if nxt is not None:
+                nxt.get_curve_angle()
+                
+                if body_part.direction == prev.direction:
+                    nxt.type = "straight"
+                    self.set_straight(nxt)
+                else:
+                    nxt.type = "curve"
+                    print(f"{nxt} angle is {nxt.angle}")
+                    self.set_curve(nxt)
             body_part.move(prev.direction)
-            self.set_straight(body_part)
+            
+            
             body_part.direction = prev.direction
             body_part = body_part.prev
         
         body_part.direction = direction
         self.set_head(body_part)
+        
         body_part.move(direction)
+    
+    # def move(self, direction):
+    #     bp : BodyPart = self.root
+    #     bp.direction = direction
+        
+    #     while True:
+    #         nxt = bp.next
+    #         prev = bp.prev
+            
+    #         if prev is not None:
+    #             if bp.direction == prev.direction:
+    #                 self.set_straight(bp)
+    #             else:
+    #                 self.set_curve(bp)
+                    
+    #             bp.move(bp.direction)
+    #             bp.direction = prev.direction
+    #         else:
+    #             bp.move(direction)
+            
+    #         if nxt is None:
+    #             break
+            
+    #         bp = nxt
+            
+            
+        
+        
+        
+        
         
         
     def collides_with(self, fruit : Food):
@@ -115,7 +162,7 @@ class Snake(Sprite):
     def set_end(self, body_part : BodyPart):
         body_part.set_sprite(self.end_sprite)
     
-    def set_curve(self, body_part : BodyPart):
+    def set_curve(self, body_part : BodyPart):        
         body_part.set_sprite(self.curve_sprite)
             
         
