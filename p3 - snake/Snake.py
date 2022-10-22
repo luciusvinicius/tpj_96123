@@ -47,10 +47,10 @@ class Snake(Sprite):
 
             body_part.move(prev.direction)
             
-            body_part.set_direction(prev.direction)
+            body_part.direction = prev.direction
             body_part = body_part.prev
         
-        body_part.set_direction(direction)
+        body_part.direction = direction
         body_part.move(direction)
         
     def collides_with(self, fruit : Food):

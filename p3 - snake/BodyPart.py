@@ -29,13 +29,10 @@ class BodyPart(Sprite):
     counter = 1
     def __init__(self, x, y, direction, scale=1, speed=1):
         Sprite.__init__(self)
-        # self.x : int = x-35
-        # self.y : int = y-18
         
         self.x : int = x
         self.y : int = y
         self.speed = speed
-        # self.scale = scale
         self.img_scale = scale * 1
         self.id = self.__class__.counter
         self.__class__.counter += 1
@@ -44,9 +41,6 @@ class BodyPart(Sprite):
         self.prev : BodyPart = None
         self.next : BodyPart = None
         self.direction : Tuple = direction
-        self.angle : int = 0
-        # self.scale = scale
-        self.previous_direction : Tuple = direction
 
         picture = image.load(IMG_URL)
         picture = transform.scale(picture, (self.img_scale, self.img_scale)) # scale
@@ -65,7 +59,6 @@ class BodyPart(Sprite):
         
     
     def teleport(self, new_x, new_y):
-        # print(f"Teleport {self.id} from ({self.rect.x}, {self.rect.y}) to ({new_x}, {new_y})")
         self.rect.update(new_x, new_y, self.img_scale, self.img_scale)
 
     
@@ -106,15 +99,12 @@ class BodyPart(Sprite):
     def get_curve_angle(self):
         prev = self.prev
         if prev is not None and prev.direction != self.direction:
-            self.angle = angles[self.direction][prev.direction]
-            return self.angle
+            try:
+                return angles[self.direction][prev.direction]
+            except KeyError:
+                return None
         
         return None
-
-    def set_direction(self, direction):
-        self.previous_direction = self.direction
-        self.direction = direction
-
 
     def __str__(self):
         return f"BodyPart {self.id}: ({self.rect.x}, {self.rect.y})"
