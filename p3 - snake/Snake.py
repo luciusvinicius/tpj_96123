@@ -76,8 +76,8 @@ class Snake(Sprite):
             lst.append((nxt.rect.x, nxt.rect.y))
             bp = nxt
     
-    def crashes_into_wall(self, WIDTH, HEIGHT):                
-        return self.root.rect.x not in range(WIDTH * self.scale) or self.root.rect.y not in range(HEIGHT * self.scale)
+    def crashes_into_wall(self, width, height):         
+        return self.root.clashes_with_wall(width, height, self.scale)       
 
     def apply_scale(self):
         bp = self.last
