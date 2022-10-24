@@ -1,4 +1,4 @@
-from Snake import Snake
+# from Snake import Snake
 
 class Command:
     def __init__(self, snake):

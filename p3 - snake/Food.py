@@ -2,10 +2,12 @@ import random
 from pygame import *
 from pygame.sprite import *
 
+from EventHandler import EventHandler
+
 IMG_URL = "./sprites/banana.png"
 
 class Food(Sprite):
-    def __init__(self, WIDTH, HEIGHT, SCALE=1):
+    def __init__(self, WIDTH, HEIGHT, SCALE=1, event_handler=EventHandler()):
         Sprite.__init__(self)
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
@@ -13,6 +15,8 @@ class Food(Sprite):
         self.img_scale = SCALE * 1.5
         picture = image.load(IMG_URL)
         picture = transform.scale(picture, (self.img_scale, self.img_scale)) # scale
+        self.event_handler = event_handler
+        self.event_handler.registry(self)
         self.image = picture.convert_alpha()
         self.rect = None
         self.sprite = Group()
@@ -30,6 +34,10 @@ class Food(Sprite):
     def change_position(self):
         random_pos = self.get_random_pos()
         self.rect = Rect(random_pos[0], random_pos[1], self.img_scale, self.img_scale)
+    
+    def listen(self, event, args):
+        if event == "snake_eat":
+            self.change_position()
         
 
 

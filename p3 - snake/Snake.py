@@ -1,21 +1,60 @@
 from pygame import *
 from pygame.sprite import *
- 
+import pygame
+
+from Command import Down, Left, Right, Up
 from BodyPart import BodyPart
+from EventHandler import EventHandler
 from Food import Food
 
 BASE_DIR = "./sprites"
 
+COMMANDS_LIST = [
+    {
+        pygame.K_w: Up,
+        pygame.K_a: Left,
+        pygame.K_s: Down,
+        pygame.K_d: Right,
+    },
+    {
+        pygame.K_UP: Up,
+        pygame.K_LEFT: Left,
+        pygame.K_DOWN: Down,
+        pygame.K_RIGHT: Right,
+    },
+    {
+        pygame.K_i: Up,
+        pygame.K_j: Left,
+        pygame.K_k: Down,
+        pygame.K_l: Right,
+    }
+]
+
 class Snake(Sprite):
-    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0), color="green"):
+    counter = 1
+    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0), color="green", eventHandler=EventHandler()):
         self.length = 1
         self.root = BodyPart(x, y, direction, scale=scale, speed=speed)
         self.speed = speed
         self.last = self.root
         self.direction = direction
+        
+        if self.__class__.counter <= len(COMMANDS_LIST):
+            self.commands = COMMANDS_LIST[self.__class__.counter - 1]
+        else:
+            self.commands = {}
+        
+        for command in self.commands:
+            self.commands[command] = self.commands[command](self)
+            
+        self.event_handler = eventHandler
+        self.event_handler.registry(self)
+        self.id = self.__class__.counter
+        self.__class__.counter += 1
         self.all_sprites = Group()
         self.all_sprites.add(self.root)
         self.scale = scale
+        
         
         self.head_sprite = image.load(f"{BASE_DIR}/head-{color}.png")
         self.straight_sprite = image.load(f"{BASE_DIR}/straight-{color}.png")
@@ -75,9 +114,24 @@ class Snake(Sprite):
                 return True
             lst.append((nxt.rect.x, nxt.rect.y))
             bp = nxt
+        
+    def kills(self, snake):
+        pass
     
     def crashes_into_wall(self, width, height):         
         return self.root.clashes_with_wall(width, height, self.scale)       
+    
+    def get_body_part_list(self):
+        lst = []
+        bp = self.root
+        while True:
+            lst.append(bp)
+            
+            if bp.next is None:
+                return lst
+            
+            bp = bp.next
+            
 
     def apply_scale(self):
         bp = self.last
@@ -100,6 +154,14 @@ class Snake(Sprite):
     
     def set_curve(self, body_part : BodyPart):        
         body_part.set_sprite(self.curve_sprite)
+        
+    def listen(self, event, args):
+        if event.strip() == "snake_eat" and args[0] == self.id:
+            self.add_part()
+    
+    
+    def __str__(self):
+        return f"Snake {self.id}"
             
         
             

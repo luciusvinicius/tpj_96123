@@ -2,7 +2,8 @@ from pygame import *
 from pygame.sprite import *
 import pygame
 import random
-from Command import Down, Left, Right, Up
+from EventHandler import EventHandler
+
 from Food import Food
 
 from Snake import Snake
@@ -10,7 +11,7 @@ from Snake import Snake
 WIDTH, HEIGHT = 80, 40
 SCALE = 15
 SPEED = 1
-NUM_PLAYERS = 3
+NUM_PLAYERS = 2
 if NUM_PLAYERS < 1:
     NUM_PLAYERS = 1
     
@@ -18,47 +19,22 @@ COLORS = ["green", "yellow"]
 
 display = pygame.display.set_mode((SCALE * WIDTH, SCALE * HEIGHT))
 clock = pygame.time.Clock()
+event_handler = EventHandler()
 LENGTH = 3
-snakes = [Snake((i+1)*40, (i+1)*20, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)]) for i in range(NUM_PLAYERS)]
-# snake = Snake(40, 20, SCALE, LENGTH, SPEED)
+snakes = [Snake((i+1)*40, (i+1)*20, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)], eventHandler=event_handler) for i in range(NUM_PLAYERS)]
 
-# snake_body = [(40, 20), (39, 20), (38, 20)]
-# snake_direction = (1, 0)
-# snake_length = 3
-# food = (random.randrange(WIDTH), random.randrange(HEIGHT))
-food = Food(WIDTH, HEIGHT, SCALE)
+food = Food(WIDTH, HEIGHT, SCALE, event_handler=event_handler)
 GAME_EVENT = pygame.event.custom_type()
 
-
-COMMANDS = {
-    pygame.K_w: Up(snakes[0]),
-    pygame.K_a: Left(snakes[0]),
-    pygame.K_s: Down(snakes[0]),
-    pygame.K_d: Right(snakes[0]),
-}
-
-if NUM_PLAYERS >= 2:
-    COMMANDS.update(
-        {
-            pygame.K_UP: Up(snakes[1]),
-            pygame.K_LEFT: Left(snakes[1]),
-            pygame.K_DOWN: Down(snakes[1]),
-            pygame.K_RIGHT: Right(snakes[1]),
-        }
-    )
-    
-    
 running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            try:
-                COMMANDS[event.key].execute()
-            except KeyError:
-                pass
-
+            for snake in snakes:
+                if event.key in snake.commands:
+                    snake.commands[event.key].execute()
         elif event.type == GAME_EVENT:
             print(event.txt)
             
@@ -72,8 +48,9 @@ while running:
         body_part = snake.root
 
         if snake.collides_with(food):
-            snake.add_part()
-            food.change_position()
+            event_handler.notify("snake_eat", snake.id)
+            # snake.add_part()
+            # food.change_position()
         
         # if snake.crashes_into_wall(WIDTH, HEIGHT):
         #     print("Snake crashed against the wall")
@@ -82,6 +59,11 @@ while running:
         # if snake.kills_itself():
         #     print("Snake eats self")
         #     running = False
+        
+        # for snake2 in snakes:
+        #     if snake2.id == snake.id: continue
+        #     if snake.kills(snake2):
+        #         print(f"{snake2} just got rect.")
         
         snake.move(snake.direction, WIDTH, HEIGHT)
         snake.apply_scale()
