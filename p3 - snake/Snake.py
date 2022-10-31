@@ -5,6 +5,7 @@ import pygame
 from Command import Down, Left, Right, Up
 from BodyPart import BodyPart
 from EventHandler import EventHandler
+from EventHandlerSingleton import EventHandlerSingleton
 from Food import Food
 
 BASE_DIR = "./sprites"
@@ -32,7 +33,8 @@ COMMANDS_LIST = [
 
 class Snake(Sprite):
     counter = 1
-    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0), color="green", eventHandler=EventHandler()):
+    def __init__(self, x, y, scale=0, length = 3, speed=1, direction = (1, 0), color="green"):
+        event_handler = EventHandlerSingleton().get()
         self.length = 1
         self.root = BodyPart(x, y, direction, scale=scale, speed=speed)
         self.speed = speed
@@ -47,7 +49,7 @@ class Snake(Sprite):
         for command in self.commands:
             self.commands[command] = self.commands[command](self)
             
-        self.event_handler = eventHandler
+        self.event_handler = event_handler
         self.event_handler.registry(self)
         self.id = self.__class__.counter
         self.__class__.counter += 1
@@ -66,8 +68,8 @@ class Snake(Sprite):
                     
     def add_part(self):
         print(f"Added Part, Length = {self.length}")
-        bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, scale=self.scale, speed=self.speed)
-        
+        # bp = BodyPart(self.last.rect.x - self.last.rect.width * self.last.direction[0], self.last.rect.y - self.last.direction[1] * self.last.rect.height, self.last.direction, scale=self.scale, speed=self.speed)
+        bp = self.last.clone(speed=self.speed, scale=self.scale)
         bp.prev = self.last
         self.last.next = bp
         self.last = bp

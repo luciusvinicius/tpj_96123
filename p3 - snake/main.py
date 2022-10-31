@@ -3,6 +3,7 @@ from pygame.sprite import *
 import pygame
 import random
 from EventHandler import EventHandler
+from EventHandlerSingleton import EventHandlerSingleton
 
 from Food import Food
 
@@ -19,11 +20,13 @@ COLORS = ["green", "yellow"]
 
 display = pygame.display.set_mode((SCALE * WIDTH, SCALE * HEIGHT))
 clock = pygame.time.Clock()
-event_handler = EventHandler()
+event_handler = EventHandlerSingleton()
 LENGTH = 3
-snakes = [Snake((i+1)*40, (i+1)*20, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)], eventHandler=event_handler) for i in range(NUM_PLAYERS)]
 
-food = Food(WIDTH, HEIGHT, SCALE, event_handler=event_handler)
+handler = event_handler.get()
+snakes = [Snake((i+1)*80, (i+1)*40, SCALE, LENGTH, SPEED, color=COLORS[i%len(COLORS)]) for i in range(NUM_PLAYERS)]
+
+food = Food(WIDTH, HEIGHT, SCALE)
 GAME_EVENT = pygame.event.custom_type()
 
 running = True
@@ -48,9 +51,7 @@ while running:
         body_part = snake.root
 
         if snake.collides_with(food):
-            event_handler.notify("snake_eat", snake.id)
-            # snake.add_part()
-            # food.change_position()
+            handler.notify("snake_eat", snake.id)
         
         # if snake.crashes_into_wall(WIDTH, HEIGHT):
         #     print("Snake crashed against the wall")

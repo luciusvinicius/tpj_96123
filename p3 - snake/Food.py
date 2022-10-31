@@ -3,11 +3,12 @@ from pygame import *
 from pygame.sprite import *
 
 from EventHandler import EventHandler
+from EventHandlerSingleton import EventHandlerSingleton
 
 IMG_URL = "./sprites/banana.png"
 
 class Food(Sprite):
-    def __init__(self, WIDTH, HEIGHT, SCALE=1, event_handler=EventHandler()):
+    def __init__(self, WIDTH, HEIGHT, SCALE=1):
         Sprite.__init__(self)
         self.WIDTH = WIDTH
         self.HEIGHT = HEIGHT
@@ -15,7 +16,7 @@ class Food(Sprite):
         self.img_scale = SCALE * 1.5
         picture = image.load(IMG_URL)
         picture = transform.scale(picture, (self.img_scale, self.img_scale)) # scale
-        self.event_handler = event_handler
+        self.event_handler = EventHandlerSingleton().get()
         self.event_handler.registry(self)
         self.image = picture.convert_alpha()
         self.rect = None
@@ -38,6 +39,11 @@ class Food(Sprite):
     def listen(self, event, args):
         if event == "snake_eat":
             self.change_position()
+            
+    def clone(self):
+        return Food(self.WIDTH, self.HEIGHT, self.SCALE, self.event_handler)
+    
+    
         
 
 

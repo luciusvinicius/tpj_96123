@@ -111,3 +111,6 @@ class BodyPart(Sprite):
 
     def __str__(self):
         return f"BodyPart {self.id}: ({self.rect.x}, {self.rect.y})"
+    
+    def clone(self, scale, speed):
+        return BodyPart(self.rect.x - self.rect.width * self.direction[0], self.rect.y - self.direction[1] * self.rect.height, self.direction, scale=scale, speed=speed)
