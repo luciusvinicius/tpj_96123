@@ -3,7 +3,8 @@ class State:
         self.name = name
 
     def enter(self):
-        print(f"Entering {self.name}")
+        pass
+        # print(f"Entering {self.name}")
 
     def update(self, obj):
         pass
@@ -37,7 +38,7 @@ class Walk(State):
 
 
 class FSM:
-    def __init__(self, states: list[State], transitions: dict[Transition]) -> None:
+    def __init__(self, states: list[State], transitions: dict[str, Transition]) -> None:
         self._states = states
         self._transitions = transitions
 
